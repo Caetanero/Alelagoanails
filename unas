@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ale Lagoa Press-On Nails Studio</title>
+    <!-- Fuente Montserrat súper fina y elegante desde Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style-unas.css">
+</head>
+<body>
+
+    <!-- Encabezado y Menú Superior -->
+    <header class="header-minimal">
+        <div class="logo">Ale Lagoa de Pirez press-on nails</div>
+        <nav class="nav-menu">
+            <a href="#inicio">Inicio</a>
+            <a href="#catalogo">Productos</a>
+            <a href="#guia-talles">Guía de talles</a>
+            <a href="#preguntas-frecuentes">Preguntas Frecuentes</a>
+            <a href="#carrito-seccion">Mi Carrito 🛒</a>
+        </nav>
+    </header>
+
+    <!-- Sección de Inicio / Bienvenida -->
+    <section id="inicio" style="padding: 20px 0; text-align: center;">
+        <h2 style="font-size: 18px; font-weight: 300; color: #555;">Uñas personalizadas y reutilizables de alta calidad</h2>
+    </section>
+
+    <!-- Catálogo de Productos -->
+    <main id="catalogo" class="contenedor-principal">
+        <div class="grid-productos">
+            
+            <!-- Producto 1 -->
+            <div class="tarjeta-producto">
+                <div class="imagen-contenedor">
+                    <img src="set1.jpg" alt="Louise" class="foto-producto">
+                </div>
+                <h3 class="nombre-producto">Louise</h3>
+                <div class="precios">
+                    <span class="precio-destacado">$24.565,00</span>
+                    <span class="aclaracion-pago">Transferencia bancaria</span>
+                </div>
+                <span class="precio-lista">$28.900,00</span>
+                <button class="boton-comprar" onclick="agregarAlCarrito('Louise', 24565)">Comprar</button>
+            </div>
+
+            <!-- Producto 2 -->
+            <div class="tarjeta-producto">
+                <div class="imagen-contenedor">
+                    <img src="set2.jpg" alt="Camille" class="foto-producto">
+                </div>
+                <h3 class="nombre-producto">Camille</h3>
+                <div class="precios">
+                    <span class="precio-destacado">$24.565,00</span>
+                    <span class="aclaracion-pago">Transferencia bancaria</span>
+                </div>
+                <span class="precio-lista">$28.900,00</span>
+                <button class="boton-comprar" onclick="agregarAlCarrito('Camille', 24565)">Comprar</button>
+            </div>
+
+            <!-- Producto 3 -->
+            <div class="tarjeta-producto">
+                <div class="imagen-contenedor">
+                    <img src="set3.jpg" alt="Vivian" class="foto-producto">
+                </div>
+                <h3 class="nombre-producto">Vivian</h3>
+                <div class="precios">
+                    <span class="precio-destacado">$24.565,00</span>
+                    <span class="aclaracion-pago">Transferencia bancaria</span>
+                </div>
+                <span class="precio-lista">$28.900,00</span>
+                <button class="boton-comprar" onclick="agregarAlCarrito('Vivian', 24565)">Comprar</button>
+            </div>
+
+        </div>
+
+        <!-- Guía de Talles Integrada -->
+        <section id="guia-talles" class="seccion-talles">
+            <h2>Guía de talles</h2>
+            <p style="margin-bottom: 10px; color: #666;">Medí con una regla la parte más ancha de tus uñas naturales en milímetros (mm):</p>
+            <div class="tabla-talles">
+                <div><span>XS:</span> 14mm | 11mm | 12mm | 11mm | 8mm</div>
+                <div><span>S:</span> 15mm | 12mm | 13mm | 12mm | 9mm</div>
+                <div><span>M:</span> 16mm | 13mm | 14mm | 13mm | 10mm</div>
+                <div><span>L:</span> 17mm | 14mm | 15mm | 14mm | 11mm</div>
+            </div>
+        </section>
+
+        <!-- Preguntas Frecuentes -->
+        <section id="preguntas-frecuentes" class="seccion-faq" style="margin-top: 60px; text-align: left; border-top: 1px solid #EAEAEA; padding-top: 30px;">
+            <h2 style="font-size: 16px; font-weight: 400; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Preguntas Frecuentes</h2>
+            
+            <details style="margin-bottom: 10px; cursor: pointer;">
+                <summary style="font-weight: 500; color: #333;">¿Cuánto duran las Press-On?</summary>
+                <p style="margin-top: 5px; color: #666; font-size: 12px;">Con pegamento especial duran hasta 2 semanas, y con stickers bifaz entre 2 y 4 días.</p>
+            </details>
+
+            <details style="margin-bottom: 10px; cursor: pointer;">
+                <summary style="font-weight: 500; color: #333;">¿Son reutilizables?</summary>
+                <p style="margin-top: 5px; color: #666; font-size: 12px;">¡Sí! Al retirarlas correctamente, podés limpiarlas y volver a utilizarlas las veces que quieras.</p>
+            </details>
+        </section>
+
+        <!-- Carrito de Compras -->
+        <section id="carrito-seccion" class="seccion-carrito">
+            <h2>Tu Carrito</h2>
+            <ul id="lista-carrito">
+                <li class="carrito-vacio">El carrito está vacío.</li>
+            </ul>
+            <div class="total-caja">
+                <span>Total:</span>
+                <strong id="monto-total">$0</strong>
+            </div>
+            
+            <div class="acciones-carrito">
+                <button class="boton-vaciar" onclick="vaciarCarrito()">Vaciar Carrito</button>
+                <button class="boton-wsp" onclick="enviarWhatsApp()">Encargar por WhatsApp</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- JavaScript para el funcionamiento del carrito y los pedidos -->
+    <script>
+        let total = 0;
+        let productosEnCarrito = [];
+
+        function agregarAlCarrito(nombreProducto, precio) {
+            if (productosEnCarrito.length === 0) {
+                document.getElementById('lista-carrito').innerHTML = '';
+            }
+
+            productosEnCarrito.push(nombreProducto);
+            total += precio;
+
+            const nuevoItem = document.createElement('li');
+            nuevoItem.innerHTML = `<span>${nombreProducto}</span> <strong>$${precio.toLocaleString('es-AR')}</strong>`;
+            document.getElementById('lista-carrito').appendChild(nuevoItem);
+
+            document.getElementById('monto-total').textContent = '$' + total.toLocaleString('es-AR');
+        }
+
+        function vaciarCarrito() {
+            total = 0;
+            productosEnCarrito = [];
+            document.getElementById('lista-carrito').innerHTML = '<li class="carrito-vacio">El carrito está vacío.</li>';
+            document.getElementById('monto-total').textContent = '$0';
+        }
+
+        function enviarWhatsApp() {
+            if (productosEnCarrito.length === 0) {
+                alert('El carrito está vacío. Seleccioná un set antes de hacer tu pedido.');
+                return;
+            }
+
+            const numeroTelefono = "5491100000000"; // Cambiar por el número real de WhatsApp
+            
+            let mensaje = "Hola! Quisiera realizar el siguiente pedido:\n\n";
+            productosEnCarrito.forEach(prod => {
+                mensaje += "• " + prod + "\n";
+            });
+            mensaje += "\nTotal: $" + total.toLocaleString('es-AR');
+            mensaje += "\n\n¿Cómo coordinamos el talle y el pago?";
+
+            window.open("https://wa.me/" + numeroTelefono + "?text=" + encodeURIComponent(mensaje), '_blank');
+        }
+    </script>
+</body>
+</html>
