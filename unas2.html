@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ale Lagoa Press-On Nails Studio</title>
+    <!-- Fuente Montserrat fina y elegante desde Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Ocultar el cursor por defecto solo en dispositivos con ratón */
+        @media (pointer: fine) {
+            body, button, a, select, input {
+                cursor: none !important;
+            }
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fafafa;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- EFECTO CURSOR PERSONALIZADO --- */
+        #custom-cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background-color: #d4af37;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.8), 0 0 20px rgba(212, 175, 55, 0.4);
+            transition: transform 0.15s ease-out, width 0.2s ease-out, height 0.2s ease-out, background-color 0.2s ease-out;
+        }
+
+        #custom-cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 28px;
+            height: 28px;
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.08s ease-out, width 0.2s ease-out, height 0.2s ease-out, border-color 0.2s ease-out;
+        }
+
+        /* Estado del cursor al hacer hover en elementos interactivos */
+        body.cursor-hover #custom-cursor-dot {
+            width: 14px;
+            height: 14px;
+            background-color: #e6c865;
+            box-shadow: 0 0 15px rgba(230, 200, 101, 0.9), 0 0 30px rgba(212, 175, 55, 0.6);
+        }
+
+        body.cursor-hover #custom-cursor-ring {
+            width: 45px;
+            height: 45px;
+            border-color: rgba(212, 175, 55, 0.9);
+            background-color: rgba(212, 175, 55, 0.05);
+        }
+
+        /* Canvas para partículas de polvo de oro */
+        #trail-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 99997;
+        }
+
+        /* Encabezado Principal */
+        .header-minimal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo img {
+            height: 90px;
+            width: auto;
+            object-fit: contain;
+            vertical-align: middle;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-menu button {
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            padding: 8px 12px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu button:hover, .nav-menu button.active {
+            color: #000;
+            border-bottom: 2px solid #000;
+        }
+
+        /* Banner Hero general */
+        .hero-section {
+            padding: 30px 20px;
+            text-align: center;
+            background-color: #fff;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .hero-section h2 {
+            font-size: 16px;
+            font-weight: 300;
+            color: #555;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Contenedor Principal */
+        .contenedor-principal {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Sistema de Pestañas */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- PESTAÑA 1: INICIO (GALERÍA CON EFECTOS) --- */
+        .inicio-intro {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .inicio-intro h1 {
+            font-size: 26px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: #111;
+        }
+
+        .inicio-intro p {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .galeria-mosaico {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .galeria-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            height: 380px;
+        }
+
+        .galeria-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+
+        .galeria-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 25px;
+            color: #fff;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .galeria-overlay h3 {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            transform: translateY(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .galeria-overlay span {
+            font-size: 13px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        .galeria-item:hover img {
+            transform: scale(1.08);
+            filter: brightness(0.95);
+        }
+
+        .galeria-item:hover .galeria-overlay h3 {
+            transform: translateY(0);
+        }
+
+        /* --- PESTAÑA 2: PRODUCTOS / CATÁLOGO --- */
+        .grid-productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .tarjeta-producto {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .tarjeta-producto:hover {
+            transform: translateY(-4px);
+        }
+
+        .imagen-contenedor img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .info-producto {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .info-producto h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .info-producto .precio {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 15px;
+        }
+
+        .selector-talle {
+            margin-bottom: 15px;
+        }
+
+        .selector-talle label {
+            font-size: 12px;
+            color: #777;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .selector-talle select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .btn-agregar {
+            background-color: #222;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 12px;
+            letter-spacing: 1px;
+            transition: background 0.3s ease;
+            margin-top: auto;
+        }
+
+        .btn-agregar:hover {
+            background-color: #444;
+        }
+
+        /* --- PESTAÑA 3: GUÍA DE TALLES --- */
+        .card-guia {
+            background: #fff;
+            padding: 35px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card-guia h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .card-guia p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .tabla-talles {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .tabla-talles th, .tabla-talles td {
+            border: 1px solid #eee;
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .tabla-talles th {
+            background-color: #f9f9f9;
+            font-weight: 600;
+        }
+
+        /* --- PESTAÑA 4: CARRITO --- */
+        .card-carrito {
+            background: #fff;
+            padding: 35px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .card-carrito h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .carrito-contenedor {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .carrito-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .btn-comprar-wa {
+            display: block;
+            width: 100%;
+            background-color: #25D366;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-comprar-wa:hover {
+            background-color: #1eb854;
+        }
+
+        /* --- PESTAÑA 5: CONTACTO --- */
+        .card-contacto {
+            background: #fff;
+            padding: 35px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            max-width: 650px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .card-contacto h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .card-contacto p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .contact-info-list {
+            text-align: left;
+            margin-bottom: 30px;
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .contact-info-list p {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .contact-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-contacto {
+            display: block;
+            padding: 14px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-contacto:hover {
+            opacity: 0.9;
+        }
+
+        .btn-contacto.wa {
+            background-color: #25D366;
+            color: white;
+        }
+
+        .btn-contacto.ig {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .header-minimal {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ELEMENTOS DEL CURSOR PERSONALIZADO -->
+    <div id="custom-cursor-dot"></div>
+    <div id="custom-cursor-ring"></div>
+    <canvas id="trail-canvas"></canvas>
+
+    <!-- Encabezado con Navegación -->
+    <header class="header-minimal">
+        <div class="logo">
+            <img src="LogoUñas.jfif" alt="Ale Lagoa Logo" onerror="this.src='https://via.placeholder.com/150x90?text=Ale+Lagoa+Studio'">
+        </div>
+        <nav class="nav-menu">
+            <button class="nav-btn active" onclick="cambiarPestana('inicio', this)">Inicio</button>
+            <button class="nav-btn" onclick="cambiarPestana('productos', this)">Productos</button>
+            <button class="nav-btn" onclick="cambiarPestana('guia-talles', this)">Guía de Talles</button>
+            <button class="nav-btn" onclick="cambiarPestana('carrito', this)">Mi Carrito 🛒 (<span id="cart-count">0</span>)</button>
+            <button class="nav-btn" onclick="cambiarPestana('contacto', this)">Contacto</button>
+        </nav>
+    </header>
+
+    <!-- Subtítulo Superior -->
+    <section class="hero-section">
+        <h2>Press-On Nails · Diseños Exclusivos y Reutilizables</h2>
+    </section>
+
+    <!-- Contenedor de Secciones -->
+    <main class="contenedor-principal">
+
+        <!-- 1. PESTAÑA: INICIO (GALERÍA) -->
+        <section id="inicio" class="tab-content active">
+            <div class="inicio-intro">
+                <h1>Colección & Modelos Destacados</h1>
+                <p>Explorá algunos de nuestros diseños hechos a mano con gel de alta calidad.</p>
+            </div>
+
+            <div class="galeria-mosaico">
+                <div class="galeria-item">
+                    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=600" alt="Modelos Press-On 1">
+                    <div class="galeria-overlay">
+                        <h3>Nude & Elegance</h3>
+                        <span>Diseños minimalistas y delicados</span>
+                    </div>
+                </div>
+
+                <div class="galeria-item">
+                    <img src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=600" alt="Modelos Press-On 2">
+                    <div class="galeria-overlay">
+                        <h3>Gold Details</h3>
+                        <span>Detalles dorados y efecto espejo</span>
+                    </div>
+                </div>
+
+                <div class="galeria-item">
+                    <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=600" alt="Modelos Press-On 3">
+                    <div class="galeria-overlay">
+                        <h3>Glitter & Glam</h3>
+                        <span>Brillo para eventos y noches especiales</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. PESTAÑA: PRODUCTOS -->
+        <section id="productos" class="tab-content">
+            <div class="grid-productos">
+
+                <!-- Producto 1 -->
+                <div class="tarjeta-producto">
+                    <div class="imagen-contenedor">
+                        <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=500" alt="Set Nude Classic">
+                    </div>
+                    <div class="info-producto">
+                        <h3>Set Nude Classic</h3>
+                        <div class="precio">$15.000</div>
+                        <div class="selector-talle">
+                            <label for="talle-1">Seleccionar Talle:</label>
+                            <select id="talle-1">
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="Personalizado">Personalizado</option>
+                            </select>
+                        </div>
+                        <button class="btn-agregar" onclick="agregarAlCarrito('Set Nude Classic', 15000, 'talle-1')">AGREGAR AL CARRITO</button>
+                    </div>
+                </div>
+
+                <!-- Producto 2 -->
+                <div class="tarjeta-producto">
+                    <div class="imagen-contenedor">
+                        <img src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=500" alt="Set French Gold">
+                    </div>
+                    <div class="info-producto">
+                        <h3>Set French Gold</h3>
+                        <div class="precio">$18.000</div>
+                        <div class="selector-talle">
+                            <label for="talle-2">Seleccionar Talle:</label>
+                            <select id="talle-2">
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="Personalizado">Personalizado</option>
+                            </select>
+                        </div>
+                        <button class="btn-agregar" onclick="agregarAlCarrito('Set French Gold', 18000, 'talle-2')">AGREGAR AL CARRITO</button>
+                    </div>
+                </div>
+
+                <!-- Producto 3 -->
+                <div class="tarjeta-producto">
+                    <div class="imagen-contenedor">
+                        <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=500" alt="Set Emerald Glitter">
+                    </div>
+                    <div class="info-producto">
+                        <h3>Set Emerald Glitter</h3>
+                        <div class="precio">$20.000</div>
+                        <div class="selector-talle">
+                            <label for="talle-3">Seleccionar Talle:</label>
+                            <select id="talle-3">
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="Personalizado">Personalizado</option>
+                            </select>
+                        </div>
+                        <button class="btn-agregar" onclick="agregarAlCarrito('Set Emerald Glitter', 20000, 'talle-3')">AGREGAR AL CARRITO</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 3. PESTAÑA: GUÍA DE TALLES -->
+        <section id="guia-talles" class="tab-content">
+            <div class="card-guia">
+                <h2>¿Cómo medir tus uñas?</h2>
+                <p>Colocá un trozo de cinta adhesiva transparente sobre la parte más ancha de tu uña natural, marcá ambos bordes con una lapicera y luego medí esa distancia en milímetros (mm) con una regla lisa.</p>
+                
+                <table class="tabla-talles">
+                    <thead>
+                        <tr>
+                            <th>Talle</th>
+                            <th>Medidas (Pulgar, Índice, Mayor, Anular, Meñique)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>XS</strong></td>
+                            <td>14mm | 11mm | 12mm | 11mm | 8mm</td>
+                        </tr>
+                        <tr>
+                            <td><strong>S</strong></td>
+                            <td>15mm | 12mm | 13mm | 12mm | 9mm</td>
+                        </tr>
+                        <tr>
+                            <td><strong>M</strong></td>
+                            <td>16mm | 13mm | 14mm | 13mm | 10mm</td>
+                        </tr>
+                        <tr>
+                            <td><strong>L</strong></td>
+                            <td>17mm | 14mm | 15mm | 14mm | 11mm</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 4. PESTAÑA: CARRITO DE COMPRAS -->
+        <section id="carrito" class="tab-content">
+            <div class="card-carrito">
+                <h2>Tu Carrito de Compras</h2>
+                <ul id="lista-carrito" class="carrito-contenedor">
+                    <li style="color: #888;">El carrito está vacío.</li>
+                </ul>
+                <p style="text-align: right; font-size: 16px;"><strong>Total: $<span id="total-precio">0</span></strong></p>
+                <a href="#" class="btn-comprar-wa" onclick="enviarWhatsApp(event)">ENVIAR PEDIDO POR WHATSAPP</a>
+            </div>
+        </section>
+
+        <!-- 5. PESTAÑA: CONTACTO -->
+        <section id="contacto" class="tab-content">
+            <div class="card-contacto">
+                <h2>Información de Contacto</h2>
+                <p>¿Querés realizar un pedido personalizado o tenés alguna duda sobre el envío?</p>
+
+                <div class="contact-info-list">
+                    <p>📍 <strong>Ubicación:</strong> Villa Ortuzar, Capital Federal. Argentina (Envíos a todo el país)</p>
+                    <p>💬 <strong>WhatsApp:</strong> +54 9 11 3796 7177</p>
+                    <p>📸 <strong>Instagram:</strong> @alelagoanails</p>
+                    <p>⏰ <strong>Horarios de atención:</strong> Lunes a Sábados de 10:00 a 19:00 hs</p>
+                </div>
+
+                <div class="contact-buttons">
+                    <a href="https://wa.me/5491112345678" target="_blank" class="btn-contacto wa">💬 Escribinos por WhatsApp</a>
+                    <a href="https://instagram.com/alelagoanails" target="_blank" class="btn-contacto ig">📸 Seguinos en Instagram</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JavaScript del Sistema -->
+    <script>
+        // --- 1. LÓGICA DEL CURSOR Y PARTÍCULAS DORADAS ---
+        const cursorDot = document.getElementById('custom-cursor-dot');
+        const cursorRing = document.getElementById('custom-cursor-ring');
+        const canvas = document.getElementById('trail-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let mouseX = -100;
+        let mouseY = -100;
+        let ringX = -100;
+        let ringY = -100;
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Detectar movimiento del ratón
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            cursorDot.style.left = `${mouseX}px`;
+            cursorDot.style.top = `${mouseY}px`;
+
+            // Agregar partículas doradas al mover el puntero
+            if (Math.random() < 0.6) {
+                particles.push(new GoldParticle(mouseX, mouseY));
+            }
+        });
+
+        // Partículas de polvo de oro
+        class GoldParticle {
+            constructor(x, y) {
+                this.x = x + (Math.random() - 0.5) * 6;
+                this.y = y + (Math.random() - 0.5) * 6;
+                this.size = Math.random() * 2.5 + 1;
+                this.vx = (Math.random() - 0.5) * 0.8;
+                this.vy = (Math.random() - 0.5) * 0.8 - 0.3;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.015;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.fillStyle = '#d4af37';
+                ctx.shadowColor = '#f3e5ab';
+                ctx.shadowBlur = 6;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Bucle de animación optimizado con requestAnimationFrame
+        function renderCursor() {
+            // Suavizado suave (lerp) para el aro
+            ringX += (mouseX - ringX) * 0.2;
+            ringY += (mouseY - ringY) * 0.2;
+
+            cursorRing.style.left = `${ringX}px`;
+            cursorRing.style.top = `${ringY}px`;
+
+            // Limpiar y redibujar lienzo de destellos
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(renderCursor);
+        }
+        requestAnimationFrame(renderCursor);
+
+        // Interactividad: agrandar cursor sobre elementos cliqueables
+        function setupCursorInteractions() {
+            const interactiveElements = document.querySelectorAll('button, a, select, .galeria-item, .tarjeta-producto');
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+            });
+        }
+        setupCursorInteractions();
+
+
+        // --- 2. NAVEGACIÓN ENTRE PESTAÑAS ---
+        function cambiarPestana(idSeccion, boton) {
+            const secciones = document.querySelectorAll('.tab-content');
+            secciones.forEach(sec => sec.classList.remove('active'));
+
+            const botones = document.querySelectorAll('.nav-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(idSeccion).classList.add('active');
+            boton.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Re-vincular interacción del cursor al cambiar contenido
+            setTimeout(setupCursorInteractions, 100);
+        }
+
+        // --- 3. LÓGICA DEL CARRITO DE COMPRAS ---
+        let carrito = [];
+
+        function agregarAlCarrito(nombre, precio, selectId) {
+            const talle = document.getElementById(selectId).value;
+            carrito.push({ nombre, precio, talle });
+            actualizarCarritoUI();
+            alert(`¡${nombre} (Talle: ${talle}) fue agregado al carrito!`);
+        }
+
+        function actualizarCarritoUI() {
+            const lista = document.getElementById('lista-carrito');
+            const totalElemento = document.getElementById('total-precio');
+            const countElemento = document.getElementById('cart-count');
+
+            countElemento.textContent = carrito.length;
+
+            if (carrito.length === 0) {
+                lista.innerHTML = '<li style="color: #888;">El carrito está vacío.</li>';
+                totalElemento.textContent = '0';
+                return;
+            }
+
+            lista.innerHTML = '';
+            let total = 0;
+
+            carrito.forEach((item, index) => {
+                total += item.precio;
+                const li = document.createElement('li');
+                li.className = 'carrito-item';
+                li.innerHTML = `
+                    <span><strong>${item.nombre}</strong> (Talle: ${item.talle}) - $${item.precio.toLocaleString('es-AR')}</span>
+                    <button onclick="eliminarDelCarrito(${index})" style="background:none; border:none; color:red; cursor:pointer;">✕</button>
+                `;
+                lista.appendChild(li);
+            });
+
+            totalElemento.textContent = total.toLocaleString('es-AR');
+            setupCursorInteractions();
+        }
+
+        function eliminarDelCarrito(index) {
+            carrito.splice(index, 1);
+            actualizarCarritoUI();
+        }
+
+        function enviarWhatsApp(e) {
+            e.preventDefault();
+            if (carrito.length === 0) {
+                alert('El carrito está vacío. Agregá al menos un producto.');
+                return;
+            }
+
+            let mensaje = '¡Hola! Quiero realizar el siguiente pedido:\n\n';
+            let total = 0;
+
+            carrito.forEach((item) => {
+                mensaje += `• ${item.nombre} - Talle: ${item.talle} - $${item.precio.toLocaleString('es-AR')}\n`;
+                total += item.precio;
+            });
+
+            mensaje += `\n*Total estimado:* $${total.toLocaleString('es-AR')}`;
+            
+            const numeroTelefono = '5491112345678'; 
+            const url = `https://wa.me/${numeroTelefono}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
