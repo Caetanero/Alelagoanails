@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Press-On Nails Studio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Montserrat & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        nude: {
+                            50: '#FAF7F5',
+                            100: '#F5EFEA',
+                            200: '#E6D7CE',
+                            300: '#D8C0B2',
+                            700: '#8A6A58',
+                            800: '#5C4436',
+                        },
+                        accent: {
+                            burgundy: '#7E3A3A',
+                            burgundyHover: '#632B2B',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Smooth scrolling and subtle scrollbar */
+        html {
+            scroll-behavior: smooth;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF7F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D8C0B2;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800 font-sans text-xs sm:text-sm antialiased selection:bg-nude-200 selection:text-nude-800 flex flex-col min-h-screen">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-nude-100 text-nude-800 text-center py-2 px-4 text-[11px] font-medium tracking-widest uppercase border-b border-nude-200">
+        ✨ Envíos a todo el país • 10% OFF pagando por Transferencia Bancaria
+    </div>
+
+    <!-- STICKY HEADER & NAVBAR -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-all">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col items-center">
+            <!-- Brand Logo -->
+            <a href="#" onclick="showSection('inicio'); return false;" class="font-serif italic text-2xl sm:text-3xl tracking-wider text-gray-900 mb-3 hover:opacity-80 transition-opacity">
+                press-on nails
+            </a>
+            
+            <!-- Navigation Links -->
+            <nav class="flex flex-wrap justify-center gap-4 sm:gap-8 text-[11px] uppercase tracking-widest font-medium text-gray-600">
+                <button onclick="showSection('inicio')" id="nav-inicio" class="nav-btn py-1 border-b-2 border-transparent hover:text-black transition-colors">Inicio</button>
+                <button onclick="showSection('productos')" id="nav-productos" class="nav-btn py-1 border-b-2 border-transparent hover:text-black transition-colors">Productos</button>
+                <button onclick="showSection('talles')" id="nav-talles" class="nav-btn py-1 border-b-2 border-transparent hover:text-black transition-colors">Guía de Talles</button>
+                <button onclick="showSection('contacto')" id="nav-contacto" class="nav-btn py-1 border-b-2 border-transparent hover:text-black transition-colors">Contacto</button>
+                <button onclick="showSection('carrito')" id="nav-carrito" class="nav-btn py-1 border-b-2 border-transparent hover:text-black transition-colors flex items-center gap-1">
+                    Mi Carrito
+                    <span id="cart-badge" class="bg-accent-burgundy text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8">
+
+        <!-- ================= SECCIÓN 1: INICIO ================= -->
+        <section id="sec-inicio" class="space-y-12">
+            <!-- Banner Hero -->
+            <div class="relative bg-nude-50 rounded-2xl overflow-hidden p-8 sm:p-16 text-center border border-nude-100 flex flex-col items-center justify-center min-h-[280px]">
+                <span class="text-nude-700 font-medium tracking-widest text-[10px] uppercase mb-2">Colección Exclusiva</span>
+                <h1 class="font-serif text-3xl sm:text-5xl text-gray-900 mb-4 font-normal">Reutilizables, hechas a mano & a medida</h1>
+                <p class="text-gray-600 max-w-lg mb-6 font-light text-xs sm:text-sm">Consigue una manicura de salón en 10 minutos desde la comodidad de tu casa con nuestros sets press-on de gel calidad premium.</p>
+                <button onclick="showSection('productos')" class="bg-accent-burgundy hover:bg-accent-burgundyHover text-white px-8 py-3 rounded-full text-xs uppercase tracking-widest font-medium transition-all transform hover:-translate-y-0.5 shadow-sm">
+                    Ver Todos los Modelos
+                </button>
+            </div>
+
+            <!-- Galería Destacada -->
+            <div>
+                <div class="flex justify-between items-end mb-6 border-b border-gray-100 pb-3">
+                    <div>
+                        <h2 class="font-serif text-2xl text-gray-900">Diseños Destacados</h2>
+                        <p class="text-gray-400 text-xs mt-1">Apoyá el mouse sobre la foto para ver más detalle</p>
+                    </div>
+                    <button onclick="showSection('productos')" class="text-nude-700 hover:text-black text-xs font-medium tracking-wider uppercase underline underline-offset-4">
+                        Ver Catálogo Completo &rarr;
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6" id="home-featured-grid">
+                    <!-- Dinámicamente cargado mediante JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECCIÓN 2: PRODUCTOS ================= -->
+        <section id="sec-productos" class="hidden space-y-8">
+            <div class="text-center max-w-xl mx-auto space-y-2">
+                <h1 class="font-serif text-3xl text-gray-900">Catálogo de Press-On</h1>
+                <p class="text-gray-500 font-light text-xs">Todos nuestros sets incluyen kit de preparación completo: pegamento especial, palito de naranjo, lima de uñas y toallita sanitizante.</p>
+            </div>
+
+            <!-- Grid de Catálogo -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6" id="catalog-grid">
+                <!-- Dinámicamente cargado mediante JS -->
+            </div>
+        </section>
+
+        <!-- ================= SECCIÓN 3: GUÍA DE TALLES ================= -->
+        <section id="sec-talles" class="hidden max-w-3xl mx-auto space-y-8">
+            <div class="text-center space-y-2">
+                <h1 class="font-serif text-3xl text-gray-900">Guía de Talles</h1>
+                <p class="text-gray-500 font-light text-xs">Aprende a medir tus uñas naturales correctamente para que tu set de Press-On encaje de forma perfecta.</p>
+            </div>
+
+            <div class="bg-nude-50 p-6 sm:p-8 rounded-2xl border border-nude-200 space-y-6">
+                <h2 class="font-serif text-xl text-nude-800 border-b border-nude-200 pb-2">¿Cómo medir tus uñas en milímetros (mm)?</h2>
+                
+                <ol class="space-y-4 text-gray-700 font-light leading-relaxed">
+                    <li class="flex gap-3">
+                        <span class="font-bold text-nude-700 bg-white w-6 h-6 rounded-full flex items-center justify-center shrink-0 border border-nude-300 text-xs">1</span>
+                        <div><strong>Usá una cinta métrica flexible o una cinta transparente:</strong> Pegá un trozo de cinta transparente de un extremo a otro sobre la parte más ancha de tu uña natural.</div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="font-bold text-nude-700 bg-white w-6 h-6 rounded-full flex items-center justify-center shrink-0 border border-nude-300 text-xs">2</span>
+                        <div><strong>Marcá los bordes:</strong> Con un bolígrafo o marcador fino, hace una marca en cada lateral de la uña justo donde comienza la piel.</div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="font-bold text-nude-700 bg-white w-6 h-6 rounded-full flex items-center justify-center shrink-0 border border-nude-300 text-xs">3</span>
+                        <div><strong>Medí con una regla:</strong> Retirá la cinta de tu uña, pegala sobre una mesa y medí la distancia entre ambas marcas utilizando una regla en milímetros.</div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="font-bold text-nude-700 bg-white w-6 h-6 rounded-full flex items-center justify-center shrink-0 border border-nude-300 text-xs">4</span>
+                        <div><strong>Repetir en ambas manos:</strong> Anotá la medida de tus 5 dedos (Pulgar, Índice, Mayor, Anular y Meñique).</div>
+                    </li>
+                </ol>
+
+                <div class="pt-4">
+                    <h3 class="font-medium text-gray-900 mb-3 uppercase tracking-wider text-xs">Tabla de Equivalencias Estándar:</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left bg-white rounded-xl overflow-hidden border border-nude-200 text-xs">
+                            <thead class="bg-nude-200 text-nude-800 font-medium">
+                                <tr>
+                                    <th class="p-3">Talle</th>
+                                    <th class="p-3">Pulgar</th>
+                                    <th class="p-3">Índice</th>
+                                    <th class="p-3">Mayor</th>
+                                    <th class="p-3">Anular</th>
+                                    <th class="p-3">Meñique</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 text-gray-600">
+                                <tr>
+                                    <td class="p-3 font-semibold text-gray-900">XS</td>
+                                    <td class="p-3">14 mm</td>
+                                    <td class="p-3">11 mm</td>
+                                    <td class="p-3">12 mm</td>
+                                    <td class="p-3">11 mm</td>
+                                    <td class="p-3">8 mm</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-gray-900">S</td>
+                                    <td class="p-3">15 mm</td>
+                                    <td class="p-3">12 mm</td>
+                                    <td class="p-3">13 mm</td>
+                                    <td class="p-3">12 mm</td>
+                                    <td class="p-3">9 mm</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-gray-900">M</td>
+                                    <td class="p-3">16 mm</td>
+                                    <td class="p-3">13 mm</td>
+                                    <td class="p-3">14 mm</td>
+                                    <td class="p-3">13 mm</td>
+                                    <td class="p-3">10 mm</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-gray-900">L</td>
+                                    <td class="p-3">17 mm</td>
+                                    <td class="p-3">14 mm</td>
+                                    <td class="p-3">15 mm</td>
+                                    <td class="p-3">14 mm</td>
+                                    <td class="p-3">11 mm</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-[11px] text-gray-500 italic mt-3">* Si tus medidas no coinciden exactamente con ningún talle estándar, seleccioná la opción <strong>"Personalizado"</strong> al hacer la compra y envianos tus milímetros por WhatsApp.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECCIÓN 4: CARRITO ================= -->
+        <section id="sec-carrito" class="hidden max-w-2xl mx-auto space-y-6">
+            <h1 class="font-serif text-3xl text-gray-900 text-center">Tu Carrito de Compras</h1>
+
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm space-y-6">
+                <!-- Items list -->
+                <div id="cart-items-container" class="divide-y divide-gray-100">
+                    <!-- Dinámicamente cargado mediante JS -->
+                </div>
+
+                <!-- Footer Summary -->
+                <div id="cart-summary" class="border-t border-gray-200 pt-4 space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-500 font-light">Subtotal:</span>
+                        <span id="cart-subtotal" class="font-semibold text-gray-900">$0</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs text-green-700 bg-green-50 p-2.5 rounded-lg border border-green-200">
+                        <span>Descuento Transferencia Bancaria (10% OFF):</span>
+                        <span id="cart-transfer-discount" class="font-semibold">-$0</span>
+                    </div>
+                    <div class="flex justify-between items-center text-base pt-2 border-t border-gray-100">
+                        <span class="font-serif font-bold text-gray-900">Total Estimado:</span>
+                        <span id="cart-total" class="font-bold text-accent-burgundy text-lg">$0</span>
+                    </div>
+
+                    <!-- Cart Action Buttons -->
+                    <div class="space-y-2 pt-2">
+                        <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-sm">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                            Finalizar Pedido por WhatsApp
+                        </button>
+                        <button onclick="clearCart()" class="w-full bg-transparent hover:bg-gray-100 text-gray-500 py-2 rounded-xl text-xs font-medium transition-colors">
+                            Vaciar Carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECCIÓN 5: CONTACTO ================= -->
+        <section id="sec-contacto" class="hidden max-w-4xl mx-auto space-y-10">
+            <div class="text-center space-y-2">
+                <h1 class="font-serif text-3xl text-gray-900">Contacto & Atención</h1>
+                <p class="text-gray-500 font-light text-xs">¿Tenés alguna duda o consulta sobre tu diseño personalizado? Escribinos y te responderemos a la brevedad.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <!-- Info Cards -->
+                <div class="space-y-4">
+                    <div class="bg-nude-50 p-6 rounded-2xl border border-nude-200 space-y-3">
+                        <h3 class="font-serif text-lg text-nude-800">Canales Directos</h3>
+                        <div class="space-y-2 text-xs text-gray-700">
+                            <p class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-900">Instagram:</span> @pressonnails.studio
+                            </p>
+                            <p class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-900">WhatsApp:</span> +54 9 11 2345-6789
+                            </p>
+                            <p class="flex items-center gap-2">
+                                <span class="font-semibold text-gray-900">Horarios:</span> Lunes a Sábados de 10:00 a 19:00 hs
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-nude-50 p-6 rounded-2xl border border-nude-200 space-y-3">
+                        <h3 class="font-serif text-lg text-nude-800">Entregas & Envíos</h3>
+                        <p class="text-xs text-gray-600 leading-relaxed font-light">
+                            Hacemos envíos a todo el país a través de Correo Argentino / Andreani. También podés retirar tu pedido sin cargo por nuestro punto de retiro ubicado en Palermo, CABA.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Formulario -->
+                <form onsubmit="handleContactSubmit(event)" class="bg-white p-6 rounded-2xl border border-gray-200 space-y-4 shadow-sm">
+                    <h3 class="font-serif text-xl text-gray-900 mb-2">Envianos un mensaje</h3>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider text-gray-500 mb-1">Nombre Completo</label>
+                        <input type="text" required class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:bg-white focus:outline-none focus:border-nude-700 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider text-gray-500 mb-1">Email / Teléfono</label>
+                        <input type="text" required class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:bg-white focus:outline-none focus:border-nude-700 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] uppercase tracking-wider text-gray-500 mb-1">Mensaje o Consulta</label>
+                        <textarea rows="4" required class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2.5 text-xs focus:bg-white focus:outline-none focus:border-nude-700 transition-colors"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-accent-burgundy hover:bg-accent-burgundyHover text-white text-xs uppercase tracking-widest font-medium py-3 rounded-lg transition-colors">
+                        Enviar Consulta
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-nude-50 border-t border-nude-200 py-8 mt-12 text-center text-gray-500 text-xs">
+        <div class="max-w-6xl mx-auto px-4 space-y-3">
+            <p class="font-serif italic text-lg text-gray-800">press-on nails studio</p>
+            <p class="font-light text-[11px]">© 2026 Press-On Nails. Todos los derechos reservados. Hecho con elegancia & amor.</p>
+        </div>
+    </footer>
+
+    <!-- PRODUCT DETAIL MODAL -->
+    <div id="product-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative shadow-xl border border-gray-100 animate-fadeIn">
+            <!-- Close Button -->
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-900 bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center transition-colors">
+                ✕
+            </button>
+
+            <div class="grid md:grid-cols-2 gap-6 items-start">
+                <!-- Gallery Section -->
+                <div class="space-y-3">
+                    <div class="aspect-square bg-gray-100 rounded-xl overflow-hidden border border-gray-200">
+                        <img id="modal-main-image" src="" alt="" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Thumbnails -->
+                    <div id="modal-thumbnails" class="flex gap-2 overflow-x-auto pb-1">
+                        <!-- Carga dinámica -->
+                    </div>
+                </div>
+
+                <!-- Product Information -->
+                <div class="space-y-4 text-left">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-widest text-nude-700 font-medium">Kit de Press-On</span>
+                        <h2 id="modal-title" class="font-serif text-2xl text-gray-900"></h2>
+                    </div>
+
+                    <!-- Pricing -->
+                    <div class="space-y-1">
+                        <div class="flex items-baseline gap-2">
+                            <span id="modal-transfer-price" class="text-lg font-bold text-accent-burgundy"></span>
+                            <span class="text-[10px] text-gray-400">(Transferencia)</span>
+                        </div>
+                        <div class="text-xs text-gray-400">
+                            Precio de Lista: <span id="modal-list-price" class="line-through"></span>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <p id="modal-description" class="text-xs text-gray-600 font-light leading-relaxed"></p>
+
+                    <!-- Size Selector -->
+                    <div class="space-y-2 pt-2 border-t border-gray-100">
+                        <label class="block text-[11px] font-medium uppercase tracking-wider text-gray-700">
+                            Seleccionar Talle:
+                        </label>
+                        <div class="grid grid-cols-5 gap-2" id="modal-size-selector">
+                            <button onclick="selectSize('XS')" class="size-btn border border-gray-200 py-2 rounded-lg text-xs font-medium hover:border-black transition-all">XS</button>
+                            <button onclick="selectSize('S')" class="size-btn border border-gray-200 py-2 rounded-lg text-xs font-medium hover:border-black transition-all">S</button>
+                            <button onclick="selectSize('M')" class="size-btn border border-gray-200 py-2 rounded-lg text-xs font-medium hover:border-black transition-all">M</button>
+                            <button onclick="selectSize('L')" class="size-btn border border-gray-200 py-2 rounded-lg text-xs font-medium hover:border-black transition-all">L</button>
+                            <button onclick="selectSize('Custom')" class="size-btn border border-gray-200 py-2 rounded-lg text-[10px] font-medium hover:border-black transition-all">Custom</button>
+                        </div>
+                        <button onclick="showSection('talles'); closeProductModal();" class="text-[10px] text-nude-700 hover:underline">¿No sabés tu talle? Ver guía de medidas &rarr;</button>
+                    </div>
+
+                    <!-- Add to Cart Button -->
+                    <button onclick="addCurrentModalToCart()" class="w-full bg-accent-burgundy hover:bg-accent-burgundyHover text-white py-3 rounded-xl text-xs uppercase tracking-widest font-medium transition-colors shadow-sm pt-3">
+                        Agregar al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DATA SET: PRODUCTS
+        const PRODUCTS = [
+            {
+                id: 1,
+                name: 'Louise',
+                transferPrice: 24565,
+                listPrice: 28900,
+                description: 'Diseño sutil con punta francesa borravino y detalles nude de alta durabilidad. Acabado brillante gel.',
+                images: [
+                    'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=600&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=600&auto=format&fit=crop'
+                ],
+                featured: true
+            },
+            {
+                id: 2,
+                name: 'Camille',
+                transferPrice: 24565,
+                listPrice: 28900,
+                description: 'Francés delicado en tono blanco perlado clásico sobre base nude natural translúcida. Ideal para todo evento.',
+                images: [
+                    'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=600&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=600&auto=format&fit=crop'
+                ],
+                featured: true
+            },
+            {
+                id: 3,
+                name: 'Vivian Ombré',
+                transferPrice: 24565,
+                listPrice: 28900,
+                description: 'Efecto degrade estilo aura/ombré con degradé desde rosado suave hasta tonos café y borravino con destellos.',
+                images: [
+                    'https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=600&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=600&auto=format&fit=crop'
+                ],
+                featured: true
+            },
+            {
+                id: 4,
+                name: 'Gift Card Personalizable',
+                transferPrice: 20000,
+                listPrice: 22000,
+                description: '¿Querés regalar Press-On pero no sabés el talle o diseño? Regalá una Gift Card digital válida por un kit a elección.',
+                images: [
+                    'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=600&auto=format&fit=crop'
+                ],
+                featured: true
+            },
+            {
+                id: 5,
+                name: 'Nude Velvet Glazed',
+                transferPrice: 26000,
+                listPrice: 30000,
+                description: 'Efecto Hailey Bieber cromado perlado sobre base nude cálida. Súper fino y moderno.',
+                images: [
+                    'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=600&auto=format&fit=crop'
+                ],
+                featured: false
+            },
+            {
+                id: 6,
+                name: 'Black Minimal Art',
+                transferPrice: 25000,
+                listPrice: 29500,
+                description: 'Trazos orgánicos en negro profundo sobre tono natural mate. Un diseño moderno de alto nivel.',
+                images: [
+                    'https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=600&auto=format&fit=crop'
+                ],
+                featured: false
+            }
+        ];
+
+        // STATE MANAGEMENT
+        let cart = [];
+        let activeModalProduct = null;
+        let selectedSize = 'S'; // Default size
+
+        // INITIALIZATION
+        window.onload = function() {
+            renderFeaturedProducts();
+            renderCatalog();
+            updateCartUI();
+            showSection('inicio');
+        };
+
+        // NAVIGATION SYSTEM
+        function showSection(sectionId) {
+            // Hide all sections
+            ['sec-inicio', 'sec-productos', 'sec-talles', 'sec-carrito', 'sec-contacto'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+
+            // Show selected section
+            document.getElementById('sec-' + sectionId).classList.remove('hidden');
+
+            // Update Nav Highlights
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('border-black', 'text-black', 'font-semibold');
+                btn.classList.add('border-transparent');
+            });
+            const activeNav = document.getElementById('nav-' + sectionId);
+            if(activeNav) {
+                activeNav.classList.add('border-black', 'text-black', 'font-semibold');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // RENDER PRODUCTS IN HOME
+        function renderFeaturedProducts() {
+            const container = document.getElementById('home-featured-grid');
+            const featured = PRODUCTS.filter(p => p.featured);
+            
+            container.innerHTML = featured.map(product => `
+                <div class="group cursor-pointer text-left" onclick="openProductModal(${product.id})">
+                    <div class="relative aspect-square bg-gray-100 rounded-xl overflow-hidden mb-3 border border-gray-100">
+                        <img src="${product.images[0]}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="bg-white/90 text-gray-900 text-[10px] uppercase font-semibold tracking-wider px-3 py-1.5 rounded-full shadow-sm">Ver Producto</span>
+                        </div>
+                    </div>
+                    <h3 class="font-normal text-xs text-gray-900 group-hover:text-nude-700 transition-colors">${product.name}</h3>
+                    <div class="flex items-baseline gap-1 mt-1">
+                        <span class="font-semibold text-accent-burgundy text-xs">$${product.transferPrice.toLocaleString('es-AR')}</span>
+                        <span class="text-[9px] text-gray-400">Transf.</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // RENDER PRODUCTS IN CATALOG
+        function renderCatalog() {
+            const container = document.getElementById('catalog-grid');
+            
+            container.innerHTML = PRODUCTS.map(product => `
+                <div class="group cursor-pointer text-left border border-gray-100 p-3 rounded-2xl hover:shadow-sm transition-all" onclick="openProductModal(${product.id})">
+                    <div class="relative aspect-square bg-gray-100 rounded-xl overflow-hidden mb-3">
+                        <img src="${product.images[0]}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="bg-white/90 text-gray-900 text-[10px] uppercase font-semibold tracking-wider px-3 py-1.5 rounded-full">Ver Detalle</span>
+                        </div>
+                    </div>
+                    <h3 class="font-medium text-xs text-gray-900 mb-1">${product.name}</h3>
+                    <div class="space-y-0.5">
+                        <div class="text-accent-burgundy font-semibold text-xs">$${product.transferPrice.toLocaleString('es-AR')} <span class="text-[9px] text-gray-400 font-normal">Transferencia</span></div>
+                        <div class="text-[10px] text-gray-400">Lista: <span class="line-through">$${product.listPrice.toLocaleString('es-AR')}</span></div>
+                    </div>
+                    <button class="mt-3 w-full bg-nude-100 group-hover:bg-accent-burgundy group-hover:text-white text-nude-800 text-[10px] uppercase tracking-wider py-2 rounded-lg transition-colors font-medium">
+                        Comprar
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // PRODUCT MODAL LOGIC
+        function openProductModal(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            activeModalProduct = product;
+            selectedSize = 'S'; // Reset default
+
+            document.getElementById('modal-title').textContent = product.name;
+            document.getElementById('modal-description').textContent = product.description;
+            document.getElementById('modal-transfer-price').textContent = '$' + product.transferPrice.toLocaleString('es-AR');
+            document.getElementById('modal-list-price').textContent = '$' + product.listPrice.toLocaleString('es-AR');
+            
+            // Set Main Image
+            const mainImg = document.getElementById('modal-main-image');
+            mainImg.src = product.images[0];
+
+            // Render Thumbnails
+            const thumbContainer = document.getElementById('modal-thumbnails');
+            thumbContainer.innerHTML = product.images.map((img, idx) => `
+                <button onclick="document.getElementById('modal-main-image').src='${img}'" class="w-12 h-12 rounded-lg overflow-hidden border border-gray-200 shrink-0 hover:border-black transition-colors">
+                    <img src="${img}" class="w-full h-full object-cover">
+                </button>
+            `).join('');
+
+            updateSizeButtonsUI();
+
+            const modal = document.getElementById('product-modal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+        }
+
+        function selectSize(size) {
+            selectedSize = size;
+            updateSizeButtonsUI();
+        }
+
+        function updateSizeButtonsUI() {
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                if (btn.textContent.trim() === selectedSize) {
+                    btn.classList.add('bg-black', 'text-white', 'border-black');
+                    btn.classList.remove('border-gray-200', 'text-gray-700');
+                } else {
+                    btn.classList.remove('bg-black', 'text-white', 'border-black');
+                    btn.classList.add('border-gray-200', 'text-gray-700');
+                }
+            });
+        }
+
+        // CART LOGIC
+        function addCurrentModalToCart() {
+            if (!activeModalProduct) return;
+
+            const existingIndex = cart.findIndex(item => item.id === activeModalProduct.id && item.size === selectedSize);
+
+            if (existingIndex > -1) {
+                cart[existingIndex].quantity += 1;
+            } else {
+                cart.push({
+                    id: activeModalProduct.id,
+                    name: activeModalProduct.name,
+                    price: activeModalProduct.listPrice,
+                    size: selectedSize,
+                    quantity: 1,
+                    image: activeModalProduct.images[0]
+                });
+            }
+
+            closeProductModal();
+            updateCartUI();
+            showSection('carrito');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function clearCart() {
+            cart = [];
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            // Update Badge
+            const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+            document.getElementById('cart-badge').textContent = totalItems;
+
+            const container = document.getElementById('cart-items-container');
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-gray-400 space-y-2">
+                        <p class="font-serif text-base">Tu carrito está vacío</p>
+                        <button onclick="showSection('productos')" class="text-xs text-nude-700 underline underline-offset-4">Explorar catálogo &rarr;</button>
+                    </div>
+                `;
+                document.getElementById('cart-subtotal').textContent = '$0';
+                document.getElementById('cart-transfer-discount').textContent = '-$0';
+                document.getElementById('cart-total').textContent = '$0';
+                return;
+            }
+
+            // Render Items
+            container.innerHTML = cart.map((item, index) => `
+                <div class="py-3 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <img src="${item.image}" class="w-12 h-12 rounded-lg object-cover border border-gray-100">
+                        <div class="text-left">
+                            <h4 class="font-medium text-xs text-gray-900">${item.name}</h4>
+                            <p class="text-[10px] text-gray-500">Talle: <span class="font-semibold text-gray-800">${item.size}</span> | Cant: ${item.quantity}</p>
+                            <p class="text-xs font-semibold text-gray-900 mt-0.5">$${(item.price * item.quantity).toLocaleString('es-AR')}</p>
+                        </div>
+                    </div>
+                    <button onclick="removeFromCart(${index})" class="text-gray-400 hover:text-red-500 text-xs px-2 py-1 transition-colors">
+                        Eliminar
+                    </button>
+                </div>
+            `).join('');
+
+            // Calculations
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const discount = subtotal * 0.10; // 10% Transfer discount
+            const total = subtotal - discount;
+
+            document.getElementById('cart-subtotal').textContent = '$' + subtotal.toLocaleString('es-AR');
+            document.getElementById('cart-transfer-discount').textContent = '-$' + discount.toLocaleString('es-AR');
+            document.getElementById('cart-total').textContent = '$' + total.toLocaleString('es-AR');
+        }
+
+        // WHATSAPP ORDER FORMATTING
+        function sendWhatsAppOrder() {
+            if (cart.length === 0) return;
+
+            const phoneNumber = "5491123456789"; // Replace with owner's number
+            
+            let message = "Hola! Quisiera realizar el siguiente pedido de Press-On Nails:\n\n";
+            
+            cart.forEach(item => {
+                message += `• *${item.name}* (Talle: ${item.size}) x${item.quantity} - $${(item.price * item.quantity).toLocaleString('es-AR')}\n`;
+            });
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const totalTransfer = subtotal * 0.90;
+
+            message += `\n*Total estimado con Transferencia (10% OFF):* $${totalTransfer.toLocaleString('es-AR')}`;
+            message += `\n\n¿Cómo coordinamos el pago y envío?`;
+
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // CONTACT FORM
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            alert('¡Gracias por tu mensaje! Te responderemos a la brevedad.');
+            event.target.reset();
+        }
+    </script>
+</body>
+</html>
