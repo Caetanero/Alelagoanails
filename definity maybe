@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ale Lagoa Press-On Nails Studio</title>
+    <!-- Fuente Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            cursor: none;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: #222;
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- LIENZO CANVAS DE ESTELA DE CURSOR --- */
+        #trail-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9997;
+        }
+
+        /* --- FONDO REAL Y DIFUMINADO SUAVE --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('./fondo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(5px);
+            -webkit-filter: blur(5px);
+            transform: scale(1.05);
+            z-index: -2;
+        }
+
+        /* --- CAPA CLARA TRANSLÚCIDA --- */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.55);
+            z-index: -1;
+        }
+
+        /* --- BARRA DE ANUNCIOS SUPERIOR --- */
+        .top-announcement {
+            background-color: #111;
+            color: #fff;
+            text-align: center;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            padding: 8px 10px;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        /* --- EFECTO DE CURSOR ELEGANTE --- */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d4af37;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            z-index: 9999;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+
+        .cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 6px;
+            background-color: #d4af37;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+        }
+
+        body:hover .custom-cursor.hovered {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(212, 175, 55, 0.15);
+            border-color: #b89728;
+        }
+
+        /* Encabezado Principal con Cristal Esmerilado */
+        .header-minimal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo img {
+            height: 75px;
+            width: auto;
+            max-width: 180px;
+            object-fit: contain;
+            vertical-align: middle;
+            display: block;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-menu button {
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            color: #555;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu button:hover, .nav-menu button.active {
+            color: #000;
+            border-bottom: 2px solid #000;
+        }
+
+        /* Botón de Menú Hamburguesa */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #111;
+        }
+
+        /* Banner Hero general */
+        .hero-section {
+            padding: 25px 20px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .hero-section h2 {
+            font-size: 15px;
+            font-weight: 300;
+            color: #333;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Contenedor Principal */
+        .contenedor-principal {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Sistema de Pestañas */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- PESTAÑA 1: INICIO (GALERÍA) --- */
+        .inicio-intro {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .inicio-intro h1 {
+            font-size: 26px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: #111;
+        }
+
+        .inicio-intro p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .galeria-mosaico {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .galeria-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            height: 380px;
+        }
+
+        .galeria-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+
+        .galeria-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 25px;
+            color: #fff;
+        }
+
+        .galeria-overlay h3 {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .galeria-overlay span {
+            font-size: 13px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        .galeria-item:hover img {
+            transform: scale(1.08);
+            filter: brightness(0.95);
+        }
+
+        /* --- PESTAÑA 2: PRODUCTOS --- */
+        .grid-productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .tarjeta-producto {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .tarjeta-producto:hover {
+            transform: translateY(-4px);
+        }
+
+        .imagen-contenedor img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .info-producto {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .info-producto h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .info-producto .precio {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 8px;
+        }
+
+        .detalles-kit {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.04);
+            padding: 6px 8px;
+            border-radius: 4px;
+        }
+
+        .selector-talle {
+            margin-bottom: 15px;
+        }
+
+        .selector-talle label {
+            font-size: 12px;
+            color: #666;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .selector-talle select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .btn-agregar {
+            background-color: #111;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            letter-spacing: 1px;
+            transition: background 0.3s ease;
+            margin-top: auto;
+        }
+
+        .btn-agregar:hover {
+            background-color: #333;
+        }
+
+        /* --- PESTAÑA 3: GUÍA DE TALLES --- */
+        .card-guia {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card-guia h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .card-guia p {
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 25px;
+        }
+
+        .tabla-talles {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .tabla-talles th, .tabla-talles td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .tabla-talles th {
+            background-color: rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+        }
+
+        /* --- PESTAÑA 4: CARRITO DE COMPRAS --- */
+        .card-carrito {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .card-carrito h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .carrito-contenedor {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .carrito-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            font-size: 14px;
+        }
+
+        .btn-comprar-wa {
+            display: block;
+            width: 100%;
+            background-color: #25D366;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-comprar-wa:hover {
+            background-color: #1eb854;
+        }
+
+        /* --- PESTAÑA 5: CONTACTO --- */
+        .card-contacto {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            max-width: 650px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .card-contacto h2 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .card-contacto p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .contact-info-list {
+            text-align: left;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .contact-info-list p {
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .contact-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-contacto {
+            display: block;
+            padding: 14px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-contacto:hover {
+            opacity: 0.9;
+        }
+
+        .btn-contacto.wa {
+            background-color: #25D366;
+            color: white;
+        }
+
+        .btn-contacto.ig {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+        }
+
+        /* --- RESPONSIVE / MENÚ HAMBURGUESA --- */
+        @media (max-width: 768px) {
+            .header-minimal {
+                padding: 12px 20px;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+                border-top: 1px solid rgba(0,0,0,0.05);
+            }
+            .nav-menu.open {
+                display: flex;
+            }
+            .nav-menu button {
+                width: 100%;
+                text-align: center;
+                padding: 12px 0;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Lienzo Canvas para la Estela Dorada -->
+    <canvas id="trail-canvas"></canvas>
+
+    <div class="top-announcement">
+        ✨ 100% Reutilizables &nbsp;|&nbsp; Envíos a todo el país &nbsp;|&nbsp; Hechas a mano
+    </div>
+
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+
+    <header class="header-minimal">
+        <div class="logo">
+            <img src="./logo.jpg" alt="Ale Lagoa Logo">
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <nav class="nav-menu" id="nav-menu">
+            <button class="nav-btn active" onclick="cambiarPestana('inicio', this)">Inicio</button>
+            <button class="nav-btn" onclick="cambiarPestana('productos', this)">Productos</button>
+            <button class="nav-btn" onclick="cambiarPestana('guia-talles', this)">Guía de Talles</button>
+            <button class="nav-btn" onclick="cambiarPestana('carrito', this)">Mi Carrito 🛒 (<span id="cart-count">0</span>)</button>
+            <button class="nav-btn" onclick="cambiarPestana('contacto', this)">Contacto</button>
+        </nav>
+    </header>
+
+    <section class="hero-section">
+        <h2>Press-On Nails · Diseños Exclusivos</h2>
+    </section>
+
+    <main class="contenedor-principal">
+
+        <section id="inicio" class="tab-content active">
+            <div class="inicio-intro">
+                <h1>Colección & Modelos Destacados</h1>
+                <p>Explorá algunos de nuestros diseños hechos a mano con gel de alta calidad.</p>
+            </div>
+
+            <div class="galeria-mosaico">
+                <div class="galeria-item">
+                    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=600" alt="Modelos Press-On 1">
+                    <div class="galeria-overlay">
+                        <h3>Nude & Elegance</h3>
+                        <span>Diseños minimalistas y delicados</span>
+                    </div>
+                </div>
+
+                <div class="galeria-item">
+                    <img src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=600" alt="Modelos Press-On 2">
+                    <div class="galeria-overlay">
+                        <h3>Gold Details</h3>
+                        <span>Detalles dorados y efecto espejo</span>
+                    </div>
+                </div>
+
+                <div class="galeria-item">
+                    <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=600" alt="Modelos Press-On 3">
+                    <div class="galeria-overlay">
+                        <h3>Glitter & Glam</h3>
+                        <span>Brillo para eventos y noches especiales</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="productos" class="tab-content">
+            <div class="grid-productos">
+
+                <div class="tarjeta-producto">
+                    <div class="imagen-contenedor">
+                        <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=500" alt="Set Nude Classic">
+                    </div>
+                    <div class="info-producto">
+                        <h3>Set Nude Classic</h3>
+                        <div class="precio">$15.000</div>
+                        <div class="detalles-kit">📦 Incluye kit de colocación (pegamento, lima y palito)</div>
+                        <div class="selector-talle">
+                            <label for="talle-1">Seleccionar Talle:</label>
+                            <select id="talle-1">
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="Personalizado">Personalizado</option>
+                            </select>
+                        </div>
+                        <button class="btn-agregar" onclick="agregarAlCarrito('Set Nude Classic', 15000, 'talle-1')">AGREGAR AL CARRITO</button>
+                    </div>
+                </div>
+
+                <div class="tarjeta-producto">
+                    <div class="imagen-contenedor">
+                        <img src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?q=80&w=500" alt="Set French Gold">
+                    </div>
+                    <div class="info-producto">
+                        <h3>Set French Gold</h3>
+                        <div class="precio">$18.000</div>
+                        <div class="detalles-kit">📦 Incluye kit de colocación (pegamento, lima y palito)</div>
+                        <div class="selector-talle">
+                            <label for="talle-2">Seleccionar Talle:</label>
+                            <select id="talle-2">
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="Personalizado">Personalizado</option>
+                            </select>
+                        </div>
+                        <button class="btn-agregar" onclick="agregarAlCarrito('Set French Gold', 18000, 'talle-2')">AGREGAR AL CARRITO</button>
+                    </div>
+                </div>
+
+                <div class="tarjeta-producto">
+                    <div class="imagen-contenedor">
+                        <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=500" alt="Set Emerald Glitter">
+                    </div>
+                    <div class="info-producto">
+                        <h3>Set Emerald Glitter</h3>
+                        <div class="precio">$20.000</div>
+                        <div class="detalles-kit">📦 Incluye kit de colocación (pegamento, lima y palito)</div>
+                        <div class="selector-talle">
+                            <label for="talle-3">Seleccionar Talle:</label>
+                            <select id="talle-3">
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="Personalizado">Personalizado</option>
+                            </select>
+                        </div>
+                        <button class="btn-agregar" onclick="agregarAlCarrito('Set Emerald Glitter', 20000, 'talle-3')">AGREGAR AL CARRITO</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="guia-talles" class="tab-content">
+            <div class="card-guia">
+                <h2>¿Cómo medir tus uñas?</h2>
+                <p>Colocá un trozo de cinta adhesiva transparente sobre la parte más ancha de tu uña natural, marcá ambos bordes con una lapicera y luego medí esa distancia en milímetros (mm) con una regla lisa.</p>
+                
+                <table class="tabla-talles">
+                    <thead>
+                        <tr>
+                            <th>Talle</th>
+                            <th>Medidas (Pulgar, Índice, Mayor, Anular, Meñique)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>XS</strong></td>
+                            <td>14mm | 11mm | 12mm | 11mm | 8mm</td>
+                        </tr>
+                        <tr>
+                            <td><strong>S</strong></td>
+                            <td>15mm | 12mm | 13mm | 12mm | 9mm</td>
+                        </tr>
+                        <tr>
+                            <td><strong>M</strong></td>
+                            <td>16mm | 13mm | 14mm | 13mm | 10mm</td>
+                        </tr>
+                        <tr>
+                            <td><strong>L</strong></td>
+                            <td>17mm | 14mm | 15mm | 14mm | 11mm</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="carrito" class="tab-content">
+            <div class="card-carrito">
+                <h2>Tu Carrito de Compras</h2>
+                <ul id="lista-carrito" class="carrito-contenedor">
+                    <li style="color: #666;">El carrito está vacío.</li>
+                </ul>
+                <p style="text-align: right; font-size: 16px;"><strong>Total: $<span id="total-precio">0</span></strong></p>
+                <a href="#" class="btn-comprar-wa" onclick="enviarWhatsApp(event)">ENVIAR PEDIDO POR WHATSAPP</a>
+            </div>
+        </section>
+
+        <section id="contacto" class="tab-content">
+            <div class="card-contacto">
+                <h2>Información de Contacto</h2>
+                <p>¿Querés realizar un pedido personalizado o tenés alguna duda sobre el envío?</p>
+
+                <div class="contact-info-list">
+                    <p>📍 <strong>Ubicación:</strong> Buenos Aires, Argentina (Envíos a todo el país)</p>
+                    <p>💬 <strong>WhatsApp:</strong> +54 9 11 1234-5678</p>
+                    <p>📸 <strong>Instagram:</strong> @alelagoanails</p>
+                    <p>⏰ <strong>Horarios de atención:</strong> Lunes a Sábados de 10:00 a 19:00 hs</p>
+                </div>
+
+                <div class="contact-buttons">
+                    <a href="https://wa.me/5491112345678" target="_blank" class="btn-contacto wa">💬 Escribinos por WhatsApp</a>
+                    <a href="https://instagram.com/alelagoanails" target="_blank" class="btn-contacto ig">📸 Seguinos en Instagram</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+
+        // LÓGICA DE ESTELA CON CANVAS
+        const canvas = document.getElementById('trail-canvas');
+        const ctx = canvas.getContext('2d');
+        let points = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+            
+            cursorDot.style.left = `${e.clientX}px`;
+            cursorDot.style.top = `${e.clientY}px`;
+
+            points.push({
+                x: e.clientX,
+                y: e.clientY,
+                radius: 4,
+                alpha: 1
+            });
+        });
+
+        function animateTrail() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < points.length; i++) {
+                const p = points[i];
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(212, 175, 55, ${p.alpha})`;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = 'rgba(212, 175, 55, 0.8)';
+                ctx.fill();
+
+                p.alpha -= 0.03;
+                p.radius *= 0.96;
+
+                if (p.alpha <= 0 || p.radius <= 0.2) {
+                    points.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animateTrail);
+        }
+        animateTrail();
+
+        const interactivos = document.querySelectorAll('button, a, select');
+        interactivos.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
+
+        function toggleMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            navMenu.classList.toggle('open');
+        }
+
+        function cambiarPestana(idSeccion, boton) {
+            const secciones = document.querySelectorAll('.tab-content');
+            secciones.forEach(sec => sec.classList.remove('active'));
+
+            const botones = document.querySelectorAll('.nav-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(idSeccion).classList.add('active');
+            boton.classList.add('active');
+
+            const navMenu = document.getElementById('nav-menu');
+            navMenu.classList.remove('open');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        let carrito = [];
+
+        function agregarAlCarrito(nombre, precio, selectId) {
+            const talle = document.getElementById(selectId).value;
+            carrito.push({ nombre, precio, talle });
+            actualizarCarritoUI();
+            alert(`¡${nombre} (Talle: ${talle}) fue agregado al carrito!`);
+        }
+
+        function actualizarCarritoUI() {
+            const lista = document.getElementById('lista-carrito');
+            const totalElemento = document.getElementById('total-precio');
+            const countElemento = document.getElementById('cart-count');
+
+            countElemento.textContent = carrito.length;
+
+            if (carrito.length === 0) {
+                lista.innerHTML = '<li style="color: #666;">El carrito está vacío.</li>';
+                totalElemento.textContent = '0';
+                return;
+            }
+
+            lista.innerHTML = '';
+            let total = 0;
+
+            carrito.forEach((item, index) => {
+                total += item.precio;
+                const li = document.createElement('li');
+                li.className = 'carrito-item';
+                li.innerHTML = `
+                    <span><strong>${item.nombre}</strong> (Talle: ${item.talle}) - $${item.precio.toLocaleString('es-AR')}</span>
+                    <button onclick="eliminarDelCarrito(${index})" style="background:none; border:none; color:red; cursor:pointer;">✕</button>
+                `;
+                lista.appendChild(li);
+            });
+
+            totalElemento.textContent = total.toLocaleString('es-AR');
+        }
+
+        function eliminarDelCarrito(index) {
+            carrito.splice(index, 1);
+            actualizarCarritoUI();
+        }
+
+        function enviarWhatsApp(e) {
+            e.preventDefault();
+            if (carrito.length === 0) {
+                alert('El carrito está vacío. Agregá al menos un producto.');
+                return;
+            }
+
+            let mensaje = '¡Hola! Quiero realizar el siguiente pedido:\n\n';
+            let total = 0;
+
+            carrito.forEach((item) => {
+                mensaje += `• ${item.nombre} - Talle: ${item.talle} - $${item.precio.toLocaleString('es-AR')}\n`;
+                total += item.precio;
+            });
+
+            mensaje += `\n*Total estimado:* $${total.toLocaleString('es-AR')}`;
+            
+            const numeroTelefono = '5491112345678'; 
+            const url = `https://wa.me/${numeroTelefono}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
