@@ -25,7 +25,7 @@
             overflow-x: hidden;
         }
 
-        /* --- CANVA DE ESTELA DE CURSOR --- */
+        /* --- LIENZO CANVAS DE ESTELA DE CURSOR --- */
         #trail-canvas {
             position: fixed;
             top: 0;
@@ -801,7 +801,6 @@
             cursorDot.style.left = `${e.clientX}px`;
             cursorDot.style.top = `${e.clientY}px`;
 
-            // Agrega punto a la estela
             points.push({
                 x: e.clientX,
                 y: e.clientY,
@@ -822,11 +821,9 @@
                 ctx.shadowColor = 'rgba(212, 175, 55, 0.8)';
                 ctx.fill();
 
-                // Reduce radio y opacidad progresivamente
                 p.alpha -= 0.03;
                 p.radius *= 0.96;
 
-                // Elimina puntos desvanecidos
                 if (p.alpha <= 0 || p.radius <= 0.2) {
                     points.splice(i, 1);
                     i--;
